@@ -4,6 +4,10 @@
 
 - Added a new `Guide` component which allows developers to easily present a user guide.
 
+### Bug Fixes
+
+- Notice will assume a default status of 'info' if none is provided. This resolves an issue where the notice would be assigned a class name `is-undefined`. This was previously the effective default by styled appearance and should not be considered a breaking change in that regard.
+
 ## 8.2.0 (2019-08-29)
 
 ### New Features
