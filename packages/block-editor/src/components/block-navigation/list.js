@@ -19,6 +19,7 @@ import { __ } from '@wordpress/i18n';
  */
 import BlockIcon from '../block-icon';
 import ButtonBlockAppender from '../button-block-appender';
+import BlockMover from '../block-mover';
 
 export default function BlockNavigationList( {
 	blocks,
@@ -56,6 +57,7 @@ export default function BlockNavigationList( {
 								{ getBlockLabel( blockType, block.attributes ) }
 								{ isSelected && <span className="screen-reader-text">{ __( '(selected block)' ) }</span> }
 							</Button>
+							{ blocks.length > 1 && ( <BlockMover clientIds={ [ block.clientId ] } /> ) }
 						</div>
 						{ showNestedBlocks && !! block.innerBlocks && !! block.innerBlocks.length && (
 							<BlockNavigationList
