@@ -31,6 +31,7 @@ export default function BlockNavigationList( {
 	showNestedBlocks,
 	showMovers,
 	parentBlockClientId,
+	isRootItem = true,
 } ) {
 	const shouldShowAppender = showAppender && !! parentBlockClientId;
 	const hasMovers = showMovers && blocks.length > 1;
@@ -41,13 +42,14 @@ export default function BlockNavigationList( {
 		 * Safari+VoiceOver won't announce the list otherwise.
 		 */
 		/* eslint-disable jsx-a11y/no-redundant-roles */
-		<ul className="block-editor-block-navigation__list" role="list">
+		<ul className="block-editor-block-navigation__list" role={ isRootItem ? 'tree' : 'group' }>
 			{ map( omitBy( blocks, isNil ), ( block ) => {
 				const blockType = getBlockType( block.name );
 				const isSelected = block.clientId === selectedBlockClientId;
+				const blockDisplayName = getBlockLabel( blockType, block.attributes );
 
 				return (
-					<li key={ block.clientId }>
+					<li key={ block.clientId } role="treeitem" aria-label={ blockDisplayName }>
 						<div className="block-editor-block-navigation__item">
 							<Button
 								className={ classnames( 'block-editor-block-navigation__item-button', {
@@ -56,7 +58,7 @@ export default function BlockNavigationList( {
 								onClick={ () => selectBlock( block.clientId ) }
 							>
 								<BlockIcon icon={ blockType.icon } showColors />
-								{ getBlockLabel( blockType, block.attributes ) }
+								{ blockDisplayName }
 								{ isSelected && <span className="screen-reader-text">{ __( '(selected block)' ) }</span> }
 							</Button>
 							{ hasMovers && ( <BlockMover clientIds={ [ block.clientId ] } /> ) }
@@ -68,8 +70,9 @@ export default function BlockNavigationList( {
 								selectBlock={ selectBlock }
 								parentBlockClientId={ block.clientId }
 								showAppender={ showAppender }
+								showMovers={ showMovers }
 								showNestedBlocks
-								showMovers
+								isRootItem={ false }
 							/>
 						) }
 					</li>
