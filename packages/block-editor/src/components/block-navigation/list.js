@@ -49,7 +49,7 @@ export default function BlockNavigationList( {
 				const blockDisplayName = getBlockLabel( blockType, block.attributes );
 
 				return (
-					<li key={ block.clientId } role="treeitem" aria-label={ blockDisplayName }>
+					<li key={ block.clientId } role="treeitem">
 						<div
 							className={ classnames( 'block-editor-block-navigation__item', {
 								'is-selected': isSelected,
