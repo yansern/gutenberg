@@ -50,11 +50,13 @@ export default function BlockNavigationList( {
 
 				return (
 					<li key={ block.clientId } role="treeitem" aria-label={ blockDisplayName }>
-						<div className="block-editor-block-navigation__item">
+						<div
+							className={ classnames( 'block-editor-block-navigation__item', {
+								'is-selected': isSelected,
+							} ) }
+						>
 							<Button
-								className={ classnames( 'block-editor-block-navigation__item-button', {
-									'is-selected': isSelected,
-								} ) }
+								className="block-editor-block-navigation__item-button"
 								onClick={ () => selectBlock( block.clientId ) }
 							>
 								<BlockIcon icon={ blockType.icon } showColors />
