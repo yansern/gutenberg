@@ -29,12 +29,12 @@ export default function BlockNavigationList( {
 
 	// Internal use only.
 	showNestedBlocks,
-	showMovers,
+	showBlockMovers,
 	parentBlockClientId,
 	isRootItem = true,
 } ) {
 	const shouldShowAppender = showAppender && !! parentBlockClientId;
-	const hasMovers = showMovers && blocks.length > 1;
+	const hasBlockMovers = showBlockMovers && blocks.length > 1;
 
 	return (
 		/*
@@ -63,7 +63,9 @@ export default function BlockNavigationList( {
 								{ blockDisplayName }
 								{ isSelected && <span className="screen-reader-text">{ __( '(selected block)' ) }</span> }
 							</Button>
-							{ hasMovers && ( <BlockMover clientIds={ [ block.clientId ] } /> ) }
+							{ hasBlockMovers && (
+								<BlockMover clientIds={ [ block.clientId ] } />
+							) }
 						</div>
 						{ showNestedBlocks && !! block.innerBlocks && !! block.innerBlocks.length && (
 							<BlockNavigationList
@@ -72,7 +74,7 @@ export default function BlockNavigationList( {
 								selectBlock={ selectBlock }
 								parentBlockClientId={ block.clientId }
 								showAppender={ showAppender }
-								showMovers={ showMovers }
+								showBlockMovers={ showBlockMovers }
 								showNestedBlocks
 								isRootItem={ false }
 							/>
