@@ -12,6 +12,7 @@ import {
 	__experimentalGetBlockLabel as getBlockLabel,
 	getBlockType,
 } from '@wordpress/blocks';
+import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 
 /**
@@ -34,6 +35,7 @@ export default function BlockNavigationList( {
 	isRootItem = true,
 } ) {
 	const shouldShowAppender = showAppender && !! parentBlockClientId;
+	const [ lastMovedBlockClientId, setLastMovedBlockClientId ] = useState();
 	const hasBlockMovers = showBlockMovers && blocks.length > 1;
 
 	return (
@@ -43,13 +45,14 @@ export default function BlockNavigationList( {
 		 */
 		/* eslint-disable jsx-a11y/no-redundant-roles */
 		<ul className="block-editor-block-navigation__list" role={ isRootItem ? 'tree' : 'group' }>
-			{ map( omitBy( blocks, isNil ), ( block ) => {
-				const blockType = getBlockType( block.name );
-				const isSelected = block.clientId === selectedBlockClientId;
-				const blockDisplayName = getBlockLabel( blockType, block.attributes );
+			{ map( omitBy( blocks, isNil ), ( { name, clientId, attributes, innerBlocks } ) => {
+				const blockType = getBlockType( name );
+				const isSelected = clientId === selectedBlockClientId;
+				const wasLastMoved = clientId === lastMovedBlockClientId;
+				const blockDisplayName = getBlockLabel( blockType, attributes );
 
 				return (
-					<li key={ block.clientId } role="treeitem">
+					<li key={ clientId } role="treeitem">
 						<div
 							className={ classnames( 'block-editor-block-navigation__item', {
 								'is-selected': isSelected,
@@ -57,22 +60,27 @@ export default function BlockNavigationList( {
 						>
 							<Button
 								className="block-editor-block-navigation__item-button"
-								onClick={ () => selectBlock( block.clientId ) }
+								onClick={ () => selectBlock( clientId ) }
 							>
 								<BlockIcon icon={ blockType.icon } showColors />
 								{ blockDisplayName }
 								{ isSelected && <span className="screen-reader-text">{ __( '(selected block)' ) }</span> }
 							</Button>
 							{ hasBlockMovers && (
-								<BlockMover clientIds={ [ block.clientId ] } />
+								<BlockMover
+									isHidden={ ! isSelected && ! wasLastMoved }
+									clientIds={ [ clientId ] }
+									onMoveUp={ () => setLastMovedBlockClientId( clientId ) }
+									onMoveDown={ () => setLastMovedBlockClientId( clientId ) }
+								/>
 							) }
 						</div>
-						{ showNestedBlocks && !! block.innerBlocks && !! block.innerBlocks.length && (
+						{ showNestedBlocks && !! innerBlocks && !! innerBlocks.length && (
 							<BlockNavigationList
-								blocks={ block.innerBlocks }
+								blocks={ innerBlocks }
 								selectedBlockClientId={ selectedBlockClientId }
 								selectBlock={ selectBlock }
-								parentBlockClientId={ block.clientId }
+								parentBlockClientId={ clientId }
 								showAppender={ showAppender }
 								showBlockMovers={ showBlockMovers }
 								showNestedBlocks
