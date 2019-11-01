@@ -22,6 +22,43 @@ import BlockIcon from '../block-icon';
 import ButtonBlockAppender from '../button-block-appender';
 import BlockMover from '../block-mover';
 
+function NavigationItem( { block, onSelect, isSelected, hasMover, onMove } ) {
+	const [ isHovered, setIsHovered ] = useState( false );
+	const {
+		name,
+		clientId,
+		attributes,
+	} = block;
+	const blockType = getBlockType( name );
+	const blockDisplayName = getBlockLabel( blockType, attributes );
+
+	return (
+		// eslint-disable-next-line jsx-a11y/mouse-events-have-key-events
+		<div
+			className={ classnames( 'block-editor-block-navigation__item', {
+				'is-selected': isSelected,
+			} ) }
+			onMouseEnter={ () => setIsHovered( true ) }
+			onMouseLeave={ () => setIsHovered( false ) }
+		>
+			<Button
+				className="block-editor-block-navigation__item-button"
+				onClick={ onSelect }
+			>
+				<BlockIcon icon={ blockType.icon } showColors />
+				{ blockDisplayName }
+				{ isSelected && <span className="screen-reader-text">{ __( '(selected block)' ) }</span> }
+			</Button>
+			<BlockMover
+				isHidden={ ! hasMover && ! isHovered }
+				clientIds={ [ clientId ] }
+				onMoveUp={ onMove }
+				onMoveDown={ onMove }
+			/>
+		</div>
+	);
+}
+
 export default function BlockNavigationList( {
 	blocks,
 	selectedBlockClientId,
@@ -45,36 +82,23 @@ export default function BlockNavigationList( {
 		 */
 		/* eslint-disable jsx-a11y/no-redundant-roles */
 		<ul className="block-editor-block-navigation__list" role={ isRootItem ? 'tree' : 'group' }>
-			{ map( omitBy( blocks, isNil ), ( { name, clientId, attributes, innerBlocks } ) => {
-				const blockType = getBlockType( name );
+			{ map( omitBy( blocks, isNil ), ( block ) => {
+				const {
+					clientId,
+					innerBlocks,
+				} = block;
 				const isSelected = clientId === selectedBlockClientId;
 				const wasLastMoved = clientId === lastMovedBlockClientId;
-				const blockDisplayName = getBlockLabel( blockType, attributes );
 
 				return (
 					<li key={ clientId } role="treeitem">
-						<div
-							className={ classnames( 'block-editor-block-navigation__item', {
-								'is-selected': isSelected,
-							} ) }
-						>
-							<Button
-								className="block-editor-block-navigation__item-button"
-								onClick={ () => selectBlock( clientId ) }
-							>
-								<BlockIcon icon={ blockType.icon } showColors />
-								{ blockDisplayName }
-								{ isSelected && <span className="screen-reader-text">{ __( '(selected block)' ) }</span> }
-							</Button>
-							{ hasBlockMovers && (
-								<BlockMover
-									isHidden={ ! isSelected && ! wasLastMoved }
-									clientIds={ [ clientId ] }
-									onMoveUp={ () => setLastMovedBlockClientId( clientId ) }
-									onMoveDown={ () => setLastMovedBlockClientId( clientId ) }
-								/>
-							) }
-						</div>
+						<NavigationItem
+							block={ block }
+							onSelect={ () => selectBlock( clientId ) }
+							isSelected={ isSelected }
+							onMove={ () => setLastMovedBlockClientId( clientId ) }
+							hasMover={ hasBlockMovers && isSelected && wasLastMoved }
+						/>
 						{ showNestedBlocks && !! innerBlocks && !! innerBlocks.length && (
 							<BlockNavigationList
 								blocks={ innerBlocks }
