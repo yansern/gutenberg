@@ -43,13 +43,19 @@
 	}
 
 	// Polish the Appender.
-	.wp-block-navigation-menu .block-list-appender {
-		margin: 0;
+	.wp-block-navigation-menu {
+		.block-list-appender {
+			margin: 0;
 
-		.block-editor-button-block-appender {
-			padding: $grid-size;
-			outline: none;
-			background: none;
+			.block-editor-button-block-appender {
+				padding: $grid-size;
+				outline: none;
+				background: none;
+			}
+		}
+
+		&.has-text-color .block-list-appender .block-editor-button-block-appender {
+			color: inherit;
 		}
 	}
 }
