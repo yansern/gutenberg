@@ -422,6 +422,10 @@ _Type_
 
 -   `Object` 
 
+<a name="Text" href="#Text">#</a> **Text**
+
+Renders an editable text input in which text formatting is not allowed.
+
 <a name="transformStyles" href="#transformStyles">#</a> **transformStyles**
 
 Applies a series of CSS rule transforms to wrap selectors inside a given class and/or rewrite URLs depending on the parameters passed.

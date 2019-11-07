@@ -1,6 +1,6 @@
 # `Text`
 
-Render a [`contenteditable` input](https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Editable_content), without providing users the option to format the content.
+Renders an editable text input in which text formatting is not allowed.
 
 ## Properties
 
@@ -15,6 +15,10 @@ Render a [`contenteditable` input](https://developer.mozilla.org/en-US/docs/Web/
 ### `tagName: String`
 
 *Default: `div`.* The [tag name](https://www.w3.org/TR/html51/syntax.html#tag-name) of the editable element. Elements that display inline are not supported.
+
+### `disableLineBreaks: Boolean`
+
+*Optional.* `Text` won't insert line breaks on `Enter` if set to `true`.
 
 ### `placeholder: String`
 

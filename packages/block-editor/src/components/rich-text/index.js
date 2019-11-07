@@ -74,6 +74,7 @@ class RichTextWrapper extends Component {
 			onSplit,
 			multiline,
 			markAutomaticChange,
+			disableLineBreaks,
 		} = this.props;
 		const canSplit = onReplace && onSplit;
 
@@ -94,14 +95,18 @@ class RichTextWrapper extends Component {
 
 		if ( multiline ) {
 			if ( shiftKey ) {
-				onChange( insert( value, '\n' ) );
+				if ( ! disableLineBreaks ) {
+					onChange( insert( value, '\n' ) );
+				}
 			} else if ( canSplit && isEmptyLine( value ) ) {
 				this.onSplit( value );
 			} else {
 				onChange( insertLineSeparator( value ) );
 			}
 		} else if ( shiftKey || ! canSplit ) {
-			onChange( insert( value, '\n' ) );
+			if ( ! disableLineBreaks ) {
+				onChange( insert( value, '\n' ) );
+			}
 		} else {
 			this.onSplit( value );
 		}

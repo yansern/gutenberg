@@ -17,4 +17,7 @@ Text.Content = ( {
 	return <Tag { ...props }>{ value }</Tag>;
 };
 
+/**
+ * Renders an editable text input in which text formatting is not allowed.
+ */
 export default Text;

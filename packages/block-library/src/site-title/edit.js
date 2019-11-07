@@ -32,6 +32,7 @@ export default function SiteTitleEdit() {
 				placeholder={ __( 'Site Title' ) }
 				value={ title }
 				onChange={ setTitle }
+				disableLineBreaks
 			/>
 		</>
 	);
