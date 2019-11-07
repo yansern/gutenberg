@@ -556,6 +556,11 @@ class RichText extends Component {
 	 *                                    created.
 	 */
 	onChange( record, { withoutHistory } = {} ) {
+		if ( this.props.__unstableDisableFormats ) {
+			record.formats = Array( record.text.length );
+			record.replacements = Array( record.text.length );
+		}
+
 		this.applyRecord( record );
 
 		const { start, end, activeFormats = [] } = record;
@@ -914,7 +919,19 @@ class RichText extends Component {
 	 * @return {Object} An internal rich-text value.
 	 */
 	formatToValue( value ) {
-		const { format, __unstableMultilineTag: multilineTag } = this.props;
+		const {
+			format,
+			__unstableMultilineTag: multilineTag,
+			__unstableDisableFormats,
+		} = this.props;
+
+		if ( __unstableDisableFormats ) {
+			return {
+				text: value,
+				formats: Array( value.length ),
+				replacements: Array( value.length ),
+			};
+		}
 
 		if ( format !== 'string' ) {
 			return value;
@@ -970,7 +987,15 @@ class RichText extends Component {
 	 * @return {*} The external data format, data type depends on props.
 	 */
 	valueToFormat( value ) {
-		const { format, __unstableMultilineTag: multilineTag } = this.props;
+		const {
+			format,
+			__unstableMultilineTag: multilineTag,
+			__unstableDisableFormats,
+		} = this.props;
+
+		if ( __unstableDisableFormats ) {
+			return value.text;
+		}
 
 		value = this.removeEditorOnlyFormats( value );
 

@@ -65,6 +65,7 @@ class RichTextWrapper extends Component {
 		this.onPaste = this.onPaste.bind( this );
 		this.onDelete = this.onDelete.bind( this );
 		this.inputRule = this.inputRule.bind( this );
+		this.getAllowedFormats.EMPTY_ARRAY = [];
 	}
 
 	onEnter( { value, onChange, shiftKey } ) {
@@ -286,7 +287,15 @@ class RichTextWrapper extends Component {
 	}
 
 	getAllowedFormats() {
-		const { allowedFormats, formattingControls } = this.props;
+		const {
+			allowedFormats,
+			formattingControls,
+			__unstableDisableFormats,
+		} = this.props;
+
+		if ( __unstableDisableFormats ) {
+			return this.getAllowedFormats.EMPTY_ARRAY;
+		}
 
 		if ( ! allowedFormats && ! formattingControls ) {
 			return;
@@ -348,6 +357,7 @@ class RichTextWrapper extends Component {
 			// To do: find a better way to implicitly inherit props.
 			start,
 			reversed,
+			__unstableDisableFormats,
 			// From experimental filter. To do: pick props instead.
 			...experimentalProps
 		} = this.props;
@@ -396,6 +406,7 @@ class RichTextWrapper extends Component {
 				__unstableMarkAutomaticChange={ markAutomaticChange }
 				__unstableDidAutomaticChange={ didAutomaticChange }
 				__unstableUndo={ undo }
+				__unstableDisableFormats={ __unstableDisableFormats }
 			>
 				{ ( { isSelected, value, onChange, Editable } ) =>
 					<>
