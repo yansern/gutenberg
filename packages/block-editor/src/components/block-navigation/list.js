@@ -34,7 +34,6 @@ function NavigationItem( { block, onSelect, isSelected, hasBlockMovers } ) {
 	const blockDisplayName = getBlockLabel( blockType, attributes );
 
 	return (
-		// eslint-disable-next-line jsx-a11y/mouse-events-have-key-events
 		<div
 			className={ classnames( 'block-editor-block-navigation__item', {
 				'is-selected': isSelected,
