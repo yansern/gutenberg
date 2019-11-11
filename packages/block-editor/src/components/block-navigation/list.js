@@ -25,7 +25,6 @@ import BlockMover from '../block-mover';
 import useMovingAnimation from '../use-moving-animation';
 
 function NavigationList( { blocks, selectBlock, selectedBlockClientId, showAppender, showBlockMovers, showNestedBlocks, parentBlockClientId } ) {
-	const hasMultipleBlocks = blocks.length > 1;
 	const isTreeRoot = ! parentBlockClientId;
 
 	return (
@@ -43,14 +42,14 @@ function NavigationList( { blocks, selectBlock, selectedBlockClientId, showAppen
 						selectBlock={ selectBlock }
 						selectedBlockClientId={ selectedBlockClientId }
 						position={ index }
-						hasSiblings={ hasMultipleBlocks }
+						hasSiblings={ blocks.length > 1 }
 						showAppender={ showAppender }
 						showBlockMovers={ showBlockMovers }
 						showNestedBlocks={ showNestedBlocks }
 					/>
 				);
 			} ) }
-			{ showAppender && hasMultipleBlocks && ! isTreeRoot && (
+			{ showAppender && blocks.length > 0 && ! isTreeRoot && (
 				<li>
 					<div className="block-editor-block-navigation__item is-appender">
 						<ButtonBlockAppender
