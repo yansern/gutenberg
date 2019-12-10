@@ -31,10 +31,10 @@ function useSpokenMessage( message, politeness ) {
 		renderToString( message );
 
 	useEffect( () => {
-		if ( message ) {
+		if ( spokenMessage ) {
 			speak( spokenMessage, politeness );
 		}
-	}, [ message, politeness ] );
+	}, [ spokenMessage, politeness ] );
 }
 
 /**
