@@ -9,8 +9,6 @@ exports[`ContrastChecker should render component when the colors do not meet AA 
   textColor="#666"
 >
   <ContrastCheckerMessage
-    backgroundColor="#666"
-    textColor="#666"
     tinyBackgroundColor={
       Object {
         "_a": 1,
@@ -45,6 +43,8 @@ exports[`ContrastChecker should render component when the colors do not meet AA 
     >
       <Notice
         isDismissible={false}
+        politeness="polite"
+        spokenMessage="This color combination may be hard for people to read."
         status="warning"
       >
         <div
@@ -71,8 +71,6 @@ exports[`ContrastChecker should render different message matching snapshot when 
   textColor="#666"
 >
   <ContrastCheckerMessage
-    backgroundColor="#555"
-    textColor="#666"
     tinyBackgroundColor={
       Object {
         "_a": 1,
@@ -107,6 +105,8 @@ exports[`ContrastChecker should render different message matching snapshot when 
     >
       <Notice
         isDismissible={false}
+        politeness="polite"
+        spokenMessage="This color combination may be hard for people to read."
         status="warning"
       >
         <div
@@ -130,7 +130,6 @@ exports[`ContrastChecker should render messages when the textColor is valid, but
   textColor="#000000"
 >
   <ContrastCheckerMessage
-    textColor="#000000"
     tinyBackgroundColor={
       Object {
         "_a": 1,
@@ -165,6 +164,8 @@ exports[`ContrastChecker should render messages when the textColor is valid, but
     >
       <Notice
         isDismissible={false}
+        politeness="polite"
+        spokenMessage="This color combination may be hard for people to read."
         status="warning"
       >
         <div
@@ -189,8 +190,6 @@ exports[`ContrastChecker should take into consideration the font size passed 1`]
   textColor="#000000"
 >
   <ContrastCheckerMessage
-    backgroundColor="#C44B4B"
-    textColor="#000000"
     tinyBackgroundColor={
       Object {
         "_a": 1,
@@ -225,6 +224,8 @@ exports[`ContrastChecker should take into consideration the font size passed 1`]
     >
       <Notice
         isDismissible={false}
+        politeness="polite"
+        spokenMessage="This color combination may be hard for people to read."
         status="warning"
       >
         <div
@@ -249,8 +250,6 @@ exports[`ContrastChecker should take into consideration wherever text is large o
   textColor="#000000"
 >
   <ContrastCheckerMessage
-    backgroundColor="#C44B4B"
-    textColor="#000000"
     tinyBackgroundColor={
       Object {
         "_a": 1,
@@ -285,6 +284,8 @@ exports[`ContrastChecker should take into consideration wherever text is large o
     >
       <Notice
         isDismissible={false}
+        politeness="polite"
+        spokenMessage="This color combination may be hard for people to read."
         status="warning"
       >
         <div
@@ -310,8 +311,6 @@ exports[`ContrastChecker should use isLargeText to make decisions if both isLarg
   textColor="#000000"
 >
   <ContrastCheckerMessage
-    backgroundColor="#C44B4B"
-    textColor="#000000"
     tinyBackgroundColor={
       Object {
         "_a": 1,
@@ -346,6 +345,8 @@ exports[`ContrastChecker should use isLargeText to make decisions if both isLarg
     >
       <Notice
         isDismissible={false}
+        politeness="polite"
+        spokenMessage="This color combination may be hard for people to read."
         status="warning"
       >
         <div
