@@ -25,6 +25,7 @@ import {
 	useSelect,
 } from '@wordpress/data';
 import { createBlock } from '@wordpress/blocks';
+import { useRef, useEffect } from '@wordpress/element';
 
 /**
  * Internal dependencies
@@ -50,11 +51,13 @@ const ALLOWED_BLOCKS = [ 'core/column' ];
 function ColumnsEditContainer( {
 	attributes,
 	className,
+	setAttributes,
 	updateAlignment,
 	updateColumns,
 	clientId,
 } ) {
 	const { verticalAlignment } = attributes;
+	const wrapperRef = useRef();
 
 	const { count } = useSelect( ( select ) => {
 		return {
@@ -65,6 +68,37 @@ function ColumnsEditContainer( {
 	const classes = classnames( className, {
 		[ `are-vertically-aligned-${ verticalAlignment }` ]: verticalAlignment,
 	} );
+
+	const { childColumnsAttributes } = useSelect( ( select ) => {
+		const { getBlockOrder, getBlockAttributes } = select( 'core/block-editor' );
+		const childColumns = getBlockOrder( clientId );
+
+		return {
+
+			childColumnsAttributes: childColumns.map( ( block ) => getBlockAttributes( block ) ),
+
+		};
+	}, [ clientId ] );
+
+	let columnsTemplateString = ``;
+
+	childColumnsAttributes.forEach( ( column ) => {
+		if ( column.width ) {
+			columnsTemplateString += `${ column.width }% `;
+		} else {
+			columnsTemplateString += `1fr `;
+		}
+	} );
+
+	useEffect( () => {
+		setAttributes( { columnsTemplate: columnsTemplateString } );
+	}, [] );
+
+	const wrapper = wrapperRef.current;
+	if ( wrapper ) {
+		const layoutWrapper = wrapper.querySelector( '.block-editor-block-list__layout' );
+		layoutWrapper.style.setProperty( '--columns-template', columnsTemplateString );
+	}
 
 	return (
 		<>
@@ -85,7 +119,7 @@ function ColumnsEditContainer( {
 					value={ verticalAlignment }
 				/>
 			</BlockControls>
-			<div className={ classes }>
+			<div ref={ wrapperRef } className={ classes }>
 				<InnerBlocks
 					templateLock="all"
 					allowedBlocks={ ALLOWED_BLOCKS } />
