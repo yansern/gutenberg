@@ -29,7 +29,7 @@ function BlockManager( {
 	// wasted renders by consequence of `Array#filter` producing a new
 	// value reference on each call.
 	blockTypes = blockTypes.filter( ( blockType ) => (
-		hasBlockSupport( blockType, 'inserter', true ) &&
+		( hasBlockSupport( blockType, 'inserter', true ) || blockType.name === 'core/block' ) &&
 		( ! search || isMatchingSearchTerm( blockType, search ) ) &&
 		! blockType.parent
 	) );
@@ -77,6 +77,7 @@ function BlockManager( {
 						blockTypes={ filter( blockTypes, {
 							category: category.slug,
 						} ) }
+						callToAction={ category.slug === 'reusable' ? <a href="https://google.com">Test</a> : undefined }
 					/>
 				) ) }
 			</div>
