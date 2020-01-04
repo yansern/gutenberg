@@ -77,7 +77,7 @@ function BlockManager( {
 						blockTypes={ filter( blockTypes, {
 							category: category.slug,
 						} ) }
-						callToAction={ category.slug === 'reusable' ? <a href="https://google.com">Test</a> : undefined }
+						callToAction={ category.slug === 'reusable' ? <a href="edit.php?post_type=wp_block">Edit blocks</a> : undefined }
 					/>
 				) ) }
 			</div>
