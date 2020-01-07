@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useMemo } from '@wordpress/element';
+import { useMemo, useEffect } from '@wordpress/element';
 import { withSpokenMessages } from '@wordpress/components';
 import { prependHTTP } from '@wordpress/url';
 import {
@@ -20,7 +20,11 @@ import { __experimentalLinkControl as LinkControl } from '@wordpress/block-edito
  */
 import { createLinkFormat, isValidHref } from './utils';
 
-function InlineLinkUI( { isActive, activeAttributes, addingLink, value, onChange, speak } ) {
+function InlineLinkUI( { isActive, activeAttributes, addingLink, value, onChange, speak, stopAddingLink } ) {
+	useEffect( () => {
+		return () => stopAddingLink();
+	}, [] );
+
 	const anchorRef = useMemo( () => {
 		const selection = window.getSelection();
 
