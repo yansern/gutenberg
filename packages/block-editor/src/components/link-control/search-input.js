@@ -49,6 +49,10 @@ const LinkControlSearchInput = ( {
 	const stopFormEventsPropagation = ( event ) => {
 		event.preventDefault();
 		event.stopPropagation();
+
+		selectItemHandler( value, {
+			url: value,
+		} );
 	};
 
 	return (
