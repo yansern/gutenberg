@@ -43,7 +43,7 @@ const MODE_EDIT = 'edit';
 
 function LinkControl( {
 	className,
-	value,
+	value = {},
 	settings,
 	fetchSearchSuggestions,
 	instanceId,

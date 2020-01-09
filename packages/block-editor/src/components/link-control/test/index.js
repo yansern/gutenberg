@@ -47,6 +47,7 @@ describe( 'Basic rendering', () => {
 		act( () => {
 			render(
 				<LinkControl
+					value={ { url: '' } }
 				/>, container
 			);
 		} );
@@ -376,7 +377,7 @@ describe( 'Selecting links', () => {
 
 		// We should be back to showing the search input
 		expect( searchInput ).not.toBeNull();
-		expect( searchInput.value ).toBe( selectedLink.title ); // prepopulated with previous link's title
+		expect( searchInput.value ).toBe( selectedLink.url ); // prepopulated with previous link's title
 		expect( currentLinkUI ).toBeNull();
 	} );
 
@@ -391,7 +392,7 @@ describe( 'Selecting links', () => {
 			} ], // url
 		] )( 'should display a current selected link UI when a %s suggestion for the search "%s" is clicked', async ( type, searchTerm, selectedLink ) => {
 			const LinkControlConsumer = () => {
-				const [ link, setLink ] = useState( null );
+				const [ link, setLink ] = useState( { url: '' } );
 
 				return (
 					<LinkControl
@@ -451,7 +452,7 @@ describe( 'Selecting links', () => {
 			} ], // url
 		] )( 'should display a current selected link UI when an %s suggestion for the search "%s" is selected using the keyboard', async ( type, searchTerm, selectedLink ) => {
 			const LinkControlConsumer = () => {
-				const [ link, setLink ] = useState( null );
+				const [ link, setLink ] = useState( { url: '' } );
 
 				return (
 					<LinkControl
