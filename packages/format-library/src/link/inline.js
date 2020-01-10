@@ -1,8 +1,13 @@
 /**
+ * External dependencies
+ */
+import { uniqueId } from 'lodash';
+
+/**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useMemo, useEffect } from '@wordpress/element';
+import { useMemo, useEffect, useState } from '@wordpress/element';
 import { withSpokenMessages } from '@wordpress/components';
 import { prependHTTP } from '@wordpress/url';
 import {
@@ -21,9 +26,18 @@ import { __experimentalLinkControl as LinkControl } from '@wordpress/block-edito
 import { createLinkFormat, isValidHref } from './utils';
 
 function InlineLinkUI( { isActive, activeAttributes, addingLink, value, onChange, speak, stopAddingLink } ) {
+	const [ mountingKey, setMountingKey ] = useState( uniqueId() );
+
 	useEffect( () => {
 		return () => stopAddingLink();
 	}, [] );
+
+	useEffect( () => {
+		// Should remount the popover to focus it properly when isAdddingLink changes
+		if ( addingLink ) {
+			setMountingKey( uniqueId() );
+		}
+	}, [ addingLink ] );
 
 	const anchorRef = useMemo( () => {
 		const selection = window.getSelection();
@@ -81,12 +95,18 @@ function InlineLinkUI( { isActive, activeAttributes, addingLink, value, onChange
 		} else {
 			speak( __( 'Link inserted.' ), 'assertive' );
 		}
+
+		if ( addingLink ) {
+			stopAddingLink();
+		}
 	};
 
 	return (
 		<LinkControl
+			key={ mountingKey }
 			value={ linkValue }
 			onChange={ onChangeLink }
+			onClose={ stopAddingLink }
 			popoverProps={ {
 				anchorRef,
 				focusOnMount: addingLink ? 'firstElement' : false,

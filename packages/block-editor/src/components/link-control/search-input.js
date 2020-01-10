@@ -46,9 +46,8 @@ const LinkControlSearchInput = ( {
 		}
 	};
 
-	const stopFormEventsPropagation = ( event ) => {
+	const submitLink = ( event ) => {
 		event.preventDefault();
-		event.stopPropagation();
 
 		selectItemHandler( value, {
 			url: value,
@@ -56,7 +55,7 @@ const LinkControlSearchInput = ( {
 	};
 
 	return (
-		<form onSubmit={ stopFormEventsPropagation }>
+		<form onSubmit={ submitLink }>
 			<URLInput
 				className="block-editor-link-control__search-input"
 				value={ value }
@@ -81,11 +80,6 @@ const LinkControlSearchInput = ( {
 					label={ __( 'Submit' ) }
 					icon="editor-break"
 					className="block-editor-link-control__search-submit"
-					onClick={ () => {
-						selectItemHandler( value, {
-							url: value,
-						} );
-					} }
 				/>
 
 				<Button
