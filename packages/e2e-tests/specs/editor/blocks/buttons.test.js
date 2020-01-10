@@ -24,7 +24,12 @@ describe( 'Buttons', () => {
 		await insertBlock( 'Buttons' );
 		await page.keyboard.type( 'WordPress' );
 		await pressKeyWithModifier( 'primary', 'k' );
-		await page.keyboard.type( 'https://wwww.wordpress.org/' );
+
+		// A similar hack is used in the links test to wait for the input to be ready.
+		await page.waitForSelector( '.block-editor-link-control__popover-inner' );
+		await page.waitForFunction( () => !! document.activeElement.closest( '.block-editor-url-input' ) );
+
+		await page.keyboard.type( 'https://www.wordpress.org/' );
 		await page.keyboard.press( 'Enter' );
 
 		expect( await getEditedPostContent() ).toMatchSnapshot();
