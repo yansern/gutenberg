@@ -163,7 +163,8 @@ function LinkControl( {
 							key={ `${ suggestion.id }-${ suggestion.type }` }
 							itemProps={ buildSuggestionItemProps( suggestion, index ) }
 							suggestion={ suggestion }
-							onClick={ () => {
+							onClick={ ( event ) => {
+								event.preventDefault();
 								setIsEditingLink( false );
 								onChange( { ...value, ...suggestion } );
 							} }
