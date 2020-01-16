@@ -65,6 +65,7 @@ function NavigationBlock( { block, onClick, isSelected, position, hasSiblings, s
 				{ showBlockMovers && hasSiblings && (
 					<BlockMover
 						isHidden={ ! isHovered && ! isSelected && ! isSelectionButtonFocused }
+						isDraggable={ false }
 						clientIds={ [ clientId ] }
 					/>
 				) }

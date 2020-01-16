@@ -44,7 +44,7 @@ export class BlockMover extends Component {
 	}
 
 	render() {
-		const { onMoveUp, onMoveDown, __experimentalOrientation: orientation, isRTL, isFirst, isLast, clientIds, blockType, firstIndex, isLocked, instanceId, isHidden, rootClientId } = this.props;
+		const { onMoveUp, onMoveDown, __experimentalOrientation: orientation, isDraggable = true, isRTL, isFirst, isLast, clientIds, blockType, firstIndex, isLocked, instanceId, isHidden, rootClientId } = this.props;
 		const { isFocused } = this.state;
 		const blocksCount = castArray( clientIds ).length;
 		if ( isLocked || ( isFirst && isLast && ! rootClientId ) ) {
@@ -99,21 +99,23 @@ export class BlockMover extends Component {
 					onBlur={ this.onBlur }
 				/>
 
-				<BlockDraggable clientIds={ clientIds }>
-					{ ( { onDraggableStart, onDraggableEnd } ) => (
-						<Button
-							icon={ dragHandle }
-							className="block-editor-block-mover__control-drag-handle block-editor-block-mover__control"
-							aria-hidden="true"
-							// Should not be able to tab to drag handle as this
-							// button can only be used with a pointer device.
-							tabIndex="-1"
-							onDragStart={ onDraggableStart }
-							onDragEnd={ onDraggableEnd }
-							draggable
-						/>
-					) }
-				</BlockDraggable>
+				{ isDraggable && (
+					<BlockDraggable clientIds={ clientIds }>
+						{ ( { onDraggableStart, onDraggableEnd } ) => (
+							<Button
+								icon={ dragHandle }
+								className="block-editor-block-mover__control-drag-handle block-editor-block-mover__control"
+								aria-hidden="true"
+								// Should not be able to tab to drag handle as this
+								// button can only be used with a pointer device.
+								tabIndex="-1"
+								onDragStart={ onDraggableStart }
+								onDragEnd={ onDraggableEnd }
+								draggable
+							/>
+						) }
+					</BlockDraggable>
+				) }
 
 				<Button
 					className="block-editor-block-mover__control"
