@@ -19,6 +19,7 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
+import NavigableTreeGrid from './navigable-tree-grid';
 import BlockIcon from '../block-icon';
 import ButtonBlockAppender from '../button-block-appender';
 import BlockMover from '../block-mover';
@@ -73,7 +74,7 @@ function NavigationBlock( { block, onClick, isSelected, position, hasSiblings, s
 	);
 }
 
-export default function BlockNavigationList( props ) {
+function NavigationList( props ) {
 	const {
 		blocks,
 		selectBlock,
@@ -104,7 +105,7 @@ export default function BlockNavigationList( props ) {
 						showBlockMovers={ showBlockMovers }
 					>
 						{ hasNestedBlocks && (
-							<BlockNavigationList
+							<NavigationList
 								blocks={ innerBlocks }
 								selectedBlockClientId={ selectedBlockClientId }
 								selectBlock={ selectBlock }
@@ -128,5 +129,13 @@ export default function BlockNavigationList( props ) {
 				</li>
 			) }
 		</ul>
+	);
+}
+
+export default function BlockNavigationList( props ) {
+	return (
+		<NavigableTreeGrid>
+			<NavigationList { ...props } />
+		</NavigableTreeGrid>
 	);
 }
