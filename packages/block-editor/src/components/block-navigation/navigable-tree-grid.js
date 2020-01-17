@@ -8,7 +8,7 @@ import { includes } from 'lodash';
  * WordPress dependencies
  */
 import { focus } from '@wordpress/dom';
-import { useRef } from '@wordpress/element';
+import { useRef, useState, Children, cloneElement } from '@wordpress/element';
 import { UP, DOWN, LEFT, RIGHT } from '@wordpress/keycodes';
 
 /**
@@ -31,7 +31,34 @@ function getRowFocusables( rowElement ) {
 	} );
 }
 
-export default function NavigableTreeGrid( { children } ) {
+function emitToChild( child, eventName, event ) {
+	if ( typeof child.props[ eventName ] === 'function' ) {
+		child.props[ eventName ]( event );
+	}
+}
+
+export function NavigableTreeGridItem( { children } ) {
+	const [ isFocused, setIsFocused ] = useState( false );
+
+	// Ensure a single child.
+	Children.only( children );
+
+	return Children.map( children, ( child ) => {
+		return cloneElement( child, {
+			tabIndex: isFocused ? 1 : -1,
+			onFocus( event ) {
+				emitToChild( child, 'onFocus', event );
+				setIsFocused( true );
+			},
+			onBlur( event ) {
+				emitToChild( child, 'onBlur', event );
+				setIsFocused( false );
+			},
+		} );
+	} );
+}
+
+export function NavigableTreeGrid( { children } ) {
 	const containerRef = useRef();
 
 	const onKeyDown = ( event ) => {

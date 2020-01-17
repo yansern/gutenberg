@@ -19,7 +19,10 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import NavigableTreeGrid from './navigable-tree-grid';
+import {
+	NavigableTreeGrid,
+	NavigableTreeGridItem,
+} from './navigable-tree-grid';
 import BlockIcon from '../block-icon';
 import ButtonBlockAppender from '../button-block-appender';
 import BlockMover from '../block-mover';
@@ -52,16 +55,18 @@ function NavigationBlock( { block, onClick, isSelected, position, hasSiblings, s
 				onMouseEnter={ () => setIsHovered( true ) }
 				onMouseLeave={ () => setIsHovered( false ) }
 			>
-				<Button
-					className="block-editor-block-navigation__item-button"
-					onClick={ onClick }
-					onFocus={ () => setIsSelectionButtonFocused( true ) }
-					onBlur={ () => setIsSelectionButtonFocused( false ) }
-				>
-					<BlockIcon icon={ blockType.icon } showColors />
-					{ blockDisplayName }
-					{ isSelected && <span className="screen-reader-text">{ __( '(selected block)' ) }</span> }
-				</Button>
+				<NavigableTreeGridItem>
+					<Button
+						className="block-editor-block-navigation__item-button"
+						onClick={ onClick }
+						onFocus={ () => setIsSelectionButtonFocused( true ) }
+						onBlur={ () => setIsSelectionButtonFocused( false ) }
+					>
+						<BlockIcon icon={ blockType.icon } showColors />
+						{ blockDisplayName }
+						{ isSelected && <span className="screen-reader-text">{ __( '(selected block)' ) }</span> }
+					</Button>
+				</NavigableTreeGridItem>
 				{ showBlockMovers && hasSiblings && (
 					<BlockMover
 						isHidden={ ! isHovered && ! isSelected && ! isSelectionButtonFocused }
