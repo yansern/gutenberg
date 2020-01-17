@@ -52,7 +52,11 @@ import WelcomeGuide from '../welcome-guide';
 
 function Layout() {
 	const isMobileViewport = useViewportMatch( 'small', '<' );
-	const { closePublishSidebar, togglePublishSidebar } = useDispatch( 'core/edit-post' );
+	const {
+		closePublishSidebar,
+		openGeneralSidebar,
+		togglePublishSidebar,
+	} = useDispatch( 'core/edit-post' );
 	const {
 		mode,
 		isRichEditingEnabled,
@@ -64,6 +68,7 @@ function Layout() {
 		hasFixedToolbar,
 		previousShortcut,
 		nextShortcut,
+		getBlockSelectionStart,
 	} = useSelect( ( select ) => {
 		return ( {
 			hasFixedToolbar: select( 'core/edit-post' ).isFeatureActive( 'fixedToolbar' ),
@@ -76,6 +81,7 @@ function Layout() {
 			isSaving: select( 'core/edit-post' ).isSavingMetaBoxes(),
 			previousShortcut: select( 'core/keyboard-shortcuts' ).getAllShortcutRawKeyCombinations( 'core/edit-post/previous-region' ),
 			nextShortcut: select( 'core/keyboard-shortcuts' ).getAllShortcutRawKeyCombinations( 'core/edit-post/next-region' ),
+			getBlockSelectionStart: select( 'core/block-editor' ).getBlockSelectionStart,
 		} );
 	}, [] );
 	const showPageTemplatePicker = __experimentalUsePageTemplatePickerVisible();
@@ -85,6 +91,9 @@ function Layout() {
 		'has-fixed-toolbar': hasFixedToolbar,
 		'has-metaboxes': hasActiveMetaboxes,
 	} );
+	const openSidebarPanel = () => openGeneralSidebar(
+		getBlockSelectionStart() ? 'edit-post/block' : 'edit-post/document'
+	);
 
 	return (
 		<>
@@ -101,6 +110,18 @@ function Layout() {
 					header={ <Header /> }
 					sidebar={ ! publishSidebarOpened && (
 						<>
+							{ ! editorSidebarOpened && (
+								<div className="edit-post-toggle-sidebar-panel">
+									<Button
+										isSecondary
+										className="edit-post-toggle-sidebar-panel__button"
+										onClick={ openSidebarPanel }
+										aria-expanded={ false }
+									>
+										{ __( 'Open sidebar panel' ) }
+									</Button>
+								</div>
+							) }
 							<SettingsSidebar />
 							<Sidebar.Slot />
 						</>

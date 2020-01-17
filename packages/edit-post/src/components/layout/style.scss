@@ -61,10 +61,12 @@
 	justify-content: center;
 }
 
+.edit-post-toggle-sidebar-panel,
 .edit-post-toggle-publish-panel {
 	background-color: $white;
 	padding: 10px 10px 10px 0;
 
+	.edit-post-toggle-sidebar-panel__button,
 	.edit-post-toggle-publish-panel__button {
 		width: auto;
 		height: auto;
