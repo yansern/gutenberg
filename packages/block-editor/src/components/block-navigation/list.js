@@ -134,10 +134,12 @@ function NavigationList( props ) {
 			{ hasAppender && (
 				<li role="treeitem">
 					<div className="editor-block-navigation__item block-editor-block-navigation__item is-appender">
-						<ButtonBlockAppender
-							rootClientId={ parentBlockClientId }
-							__experimentalSelectBlockOnInsert={ false }
-						/>
+						<RovingTabIndexItem>
+							<ButtonBlockAppender
+								rootClientId={ parentBlockClientId }
+								__experimentalSelectBlockOnInsert={ false }
+							/>
+						</RovingTabIndexItem>
 					</div>
 				</li>
 			) }

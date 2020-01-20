@@ -7,6 +7,7 @@ import classnames from 'classnames';
  * WordPress dependencies
  */
 import { Button, Icon, Tooltip } from '@wordpress/components';
+import { forwardRef } from '@wordpress/element';
 import { _x, sprintf } from '@wordpress/i18n';
 
 /**
@@ -14,7 +15,7 @@ import { _x, sprintf } from '@wordpress/i18n';
  */
 import Inserter from '../inserter';
 
-function ButtonBlockAppender( { rootClientId, className, __experimentalSelectBlockOnInsert: selectBlockOnInsert } ) {
+const ButtonBlockAppender = forwardRef( ( { rootClientId, className, __experimentalSelectBlockOnInsert: selectBlockOnInsert, ...props }, ref ) => {
 	return (
 		<Inserter
 			rootClientId={ rootClientId }
@@ -31,12 +32,14 @@ function ButtonBlockAppender( { rootClientId, className, __experimentalSelectBlo
 				return (
 					<Tooltip text={ label }>
 						<Button
+							ref={ ref }
 							className={ classnames( className, 'block-editor-button-block-appender' ) }
 							onClick={ onToggle }
 							aria-haspopup={ isToggleButton ? 'true' : undefined }
 							aria-expanded={ isToggleButton ? isOpen : undefined }
 							disabled={ disabled }
 							label={ label }
+							{ ...props }
 						>
 							<span className="screen-reader-text">{ label }</span>
 							<Icon icon="insert" />
@@ -47,7 +50,7 @@ function ButtonBlockAppender( { rootClientId, className, __experimentalSelectBlo
 			isAppender
 		/>
 	);
-}
+} );
 
 /**
  * @see https://github.com/WordPress/gutenberg/blob/master/packages/block-editor/src/components/button-block-appender/README.md
