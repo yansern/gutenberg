@@ -10,6 +10,7 @@ import { getBlockType } from '@wordpress/blocks';
 import { Button } from '@wordpress/components';
 import { useInstanceId } from '@wordpress/compose';
 import { useSelect, useDispatch } from '@wordpress/data';
+import { forwardRef } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 
 /**
@@ -48,7 +49,7 @@ const getMovementDirection = ( direction, orientation, isRTL ) => {
 	return null;
 };
 
-function BlockMoverButton( { clientIds, direction, ...props } ) {
+const BlockMoverButton = forwardRef( ( { clientIds, direction, ...props }, ref ) => {
 	const instanceId = useInstanceId( BlockMoverButton );
 	const blocksCount = castArray( clientIds ).length;
 
@@ -94,6 +95,7 @@ function BlockMoverButton( { clientIds, direction, ...props } ) {
 	return (
 		<>
 			<Button
+				ref={ ref }
 				className="block-editor-block-mover-button"
 				icon={ getArrowIcon( direction, orientation, isRTL ) }
 				// translators: %s: Horizontal direction of block movement ( left, right )
@@ -119,16 +121,16 @@ function BlockMoverButton( { clientIds, direction, ...props } ) {
 			</span>
 		</>
 	);
-}
+} );
 
-export function MoveUpButton( props ) {
+export const MoveUpButton = forwardRef( ( props, ref ) => {
 	return (
-		<BlockMoverButton direction="up" { ...props } />
+		<BlockMoverButton direction="up" ref={ ref } { ...props } />
 	);
-}
+} );
 
-export function MoveDownButton( props ) {
+export const MoveDownButton = forwardRef( ( props, ref ) => {
 	return (
-		<BlockMoverButton direction="down" { ...props } />
+		<BlockMoverButton direction="down" ref={ ref } { ...props } />
 	);
-}
+} );
