@@ -124,3 +124,17 @@ $tree-item-height: 36px;
 .components-popover.block-editor-block-navigation__popover {
 	z-index: z-index(".components-popover.block-editor-block-navigation__popover");
 }
+
+.block-editor-block-navigation__item-movers {
+	display: flex;
+	flex-direction: row;
+
+	// Make opacity zero for 'edit-post__fade-in-animation'.
+	opacity: 0;
+	@include reduce-motion("transition");
+
+	&.is-visible {
+		opacity: 1;
+		@include edit-post__fade-in-animation;
+	}
+}
