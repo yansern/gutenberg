@@ -19,18 +19,16 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import {
-	NavigableTreeGrid,
-	NavigableTreeGridItem,
-} from './navigable-tree-grid';
+import NavigableTreeGrid from '../navigable-tree-grid';
+import RovingTabIndexItem from '../roving-tab-index/item';
 import BlockIcon from '../block-icon';
 import ButtonBlockAppender from '../button-block-appender';
-import BlockMover from '../block-mover';
+import { MoveUpButton, MoveDownButton } from '../block-mover/mover-buttons';
 import useMovingAnimation from '../use-moving-animation';
 
 function NavigationBlock( { block, onClick, isSelected, position, hasSiblings, showBlockMovers, children } ) {
 	const [ isHovered, setIsHovered ] = useState( false );
-	const [ isSelectionButtonFocused, setIsSelectionButtonFocused ] = useState( false );
+	const [ isFocused, setIsFocused ] = useState( false );
 	const {
 		name,
 		clientId,
@@ -46,6 +44,8 @@ function NavigationBlock( { block, onClick, isSelected, position, hasSiblings, s
 
 	const style = useMovingAnimation( wrapper, isSelected, adjustScrolling, enableAnimation, animateOnChange );
 
+	const hasVisibleMovers = isHovered || isSelected || isFocused;
+
 	return (
 		<animated.li ref={ wrapper } style={ style } role="treeitem">
 			<div
@@ -54,25 +54,32 @@ function NavigationBlock( { block, onClick, isSelected, position, hasSiblings, s
 				} ) }
 				onMouseEnter={ () => setIsHovered( true ) }
 				onMouseLeave={ () => setIsHovered( false ) }
+				onFocus={ () => setIsFocused( true ) }
+				onBlur={ () => setIsFocused( false ) }
 			>
-				<NavigableTreeGridItem>
+				<RovingTabIndexItem>
 					<Button
 						className="block-editor-block-navigation__item-button"
 						onClick={ onClick }
-						onFocus={ () => setIsSelectionButtonFocused( true ) }
-						onBlur={ () => setIsSelectionButtonFocused( false ) }
 					>
 						<BlockIcon icon={ blockType.icon } showColors />
 						{ blockDisplayName }
 						{ isSelected && <span className="screen-reader-text">{ __( '(selected block)' ) }</span> }
 					</Button>
-				</NavigableTreeGridItem>
+				</RovingTabIndexItem>
 				{ showBlockMovers && hasSiblings && (
-					<BlockMover
-						isHidden={ ! isHovered && ! isSelected && ! isSelectionButtonFocused }
-						isDraggable={ false }
-						clientIds={ [ clientId ] }
-					/>
+					<div className={ classnames( 'block-editor-block-navigation__item-movers', { 'is-visible': hasVisibleMovers } ) }>
+						<RovingTabIndexItem>
+							<MoveUpButton
+								clientIds={ [ clientId ] }
+							/>
+						</RovingTabIndexItem>
+						<RovingTabIndexItem>
+							<MoveDownButton
+								clientIds={ [ clientId ] }
+							/>
+						</RovingTabIndexItem>
+					</div>
 				) }
 			</div>
 			{ children }
