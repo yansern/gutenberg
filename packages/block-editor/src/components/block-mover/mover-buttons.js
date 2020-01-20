@@ -49,7 +49,7 @@ const getMovementDirection = ( direction, orientation, isRTL ) => {
 	return null;
 };
 
-const BlockMoverButton = forwardRef( ( { clientIds, direction, ...props }, ref ) => {
+const BlockMoverButton = forwardRef( ( { clientIds, direction, __experimentalOrientation: orientation, ...props }, ref ) => {
 	const instanceId = useInstanceId( BlockMoverButton );
 	const blocksCount = castArray( clientIds ).length;
 
@@ -61,7 +61,7 @@ const BlockMoverButton = forwardRef( ( { clientIds, direction, ...props }, ref )
 		isLast,
 		firstIndex,
 		isRTL,
-		orientation,
+		moverOrientation,
 	} = useSelect( ( select ) => {
 		const { getBlockIndex, getBlockRootClientId, getBlockOrder, getBlock, getSettings, getBlockListSettings } = select( 'core/block-editor' );
 		const normalizedClientIds = castArray( clientIds );
@@ -83,7 +83,7 @@ const BlockMoverButton = forwardRef( ( { clientIds, direction, ...props }, ref )
 			isFirst: isFirstBlock,
 			isLast: isLastBlock,
 			isRTL: getSettings().isRTL,
-			orientation: __experimentalMoverDirection,
+			moverOrientation: orientation || __experimentalMoverDirection,
 		};
 	}, [ clientIds, direction ] );
 
@@ -97,9 +97,9 @@ const BlockMoverButton = forwardRef( ( { clientIds, direction, ...props }, ref )
 			<Button
 				ref={ ref }
 				className="block-editor-block-mover-button"
-				icon={ getArrowIcon( direction, orientation, isRTL ) }
+				icon={ getArrowIcon( direction, moverOrientation, isRTL ) }
 				// translators: %s: Horizontal direction of block movement ( left, right )
-				label={ sprintf( __( 'Move %s' ), getMovementDirection( direction, orientation, isRTL ) ) }
+				label={ sprintf( __( 'Move %s' ), getMovementDirection( direction, moverOrientation, isRTL ) ) }
 				aria-describedby={ descriptionId }
 				onClick={ onClick }
 				aria-disabled={ isDisabled }
@@ -114,7 +114,7 @@ const BlockMoverButton = forwardRef( ( { clientIds, direction, ...props }, ref )
 						isFirst,
 						isLast,
 						direction === 'up' ? -1 : 1,
-						orientation,
+						moverOrientation,
 						isRTL,
 					)
 				}

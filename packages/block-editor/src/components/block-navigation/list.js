@@ -71,11 +71,13 @@ function NavigationBlock( { block, onClick, isSelected, position, hasSiblings, s
 					<div className={ classnames( 'block-editor-block-navigation__item-movers', { 'is-visible': hasVisibleMovers } ) }>
 						<RovingTabIndexItem>
 							<MoveUpButton
+								__experimentalOrientation="vertical"
 								clientIds={ [ clientId ] }
 							/>
 						</RovingTabIndexItem>
 						<RovingTabIndexItem>
 							<MoveDownButton
+								__experimentalOrientation="vertical"
 								clientIds={ [ clientId ] }
 							/>
 						</RovingTabIndexItem>
