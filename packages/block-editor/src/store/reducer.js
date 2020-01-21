@@ -23,7 +23,6 @@ import {
  */
 import { combineReducers } from '@wordpress/data';
 import { isReusableBlock } from '@wordpress/blocks';
-import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
@@ -1378,9 +1377,9 @@ export function selectedMountedBlock( state, action ) {
  *
  * @return {Object} Updated state.
  */
-export function deviceType( state = __( 'Desktop' ), action ) {
+export function deviceType( state = 'Desktop', action ) {
 	switch ( action.type ) {
-		case 'TOGGLE_CANVAS_WIDTH':
+		case 'SET_PREVIEW_DEVICE_TYPE':
 			return action.deviceType;
 	}
 

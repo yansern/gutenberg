@@ -1545,6 +1545,6 @@ export function __unstableGetSelectedMountedBlock( state ) {
  *
  * @return {string} Device type.
  */
-export function deviceType( state ) {
+export function getDeviceType( state ) {
 	return state.deviceType;
 }
