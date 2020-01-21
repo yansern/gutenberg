@@ -38,6 +38,8 @@ function LinkControl( {
 	const instanceId = useInstanceId( LinkControl );
 	const [ inputValue, setInputValue ] = useState( ( value && value.url ) || '' );
 	const [ isEditingLink, setIsEditingLink ] = useState( ! value || ! value.url );
+	const [ isResolvingLink, setIsResolvingLink ] = useState( false );
+
 	const { fetchSearchSuggestions } = useSelect( ( select ) => {
 		const { getSettings } = select( 'core/block-editor' );
 		return {
@@ -157,7 +159,7 @@ function LinkControl( {
 						<LinkControlSearchCreate
 							searchTerm={ inputValue }
 							onClick={ async () => {
-								setIsEditingLink( false );
+								setIsResolvingLink( true );
 								onChange( {
 									title: 'Loading link...',
 									url: 'loading...',
@@ -170,6 +172,7 @@ function LinkControl( {
 										} );
 									}, 5000 );
 								} );
+								setIsResolvingLink( false );
 								setIsEditingLink( false );
 								onChange( _result );
 							} }
@@ -183,7 +186,27 @@ function LinkControl( {
 
 	return (
 		<div className="block-editor-link-control">
-			{ ( ! isEditingLink ) && (
+
+			{ isResolvingLink && (
+				<div
+					className={ classnames( 'block-editor-link-control__search-item', {
+						'is-current': true,
+					} ) }
+				>
+					<span className="block-editor-link-control__search-item-header">
+						<span
+							className="block-editor-link-control__search-item-title"
+						>
+							{ __( 'Creating Page' ) }
+						</span>
+						<span className="block-editor-link-control__search-item-info">
+							{ __( 'Your new Page is being created' ) }.
+						</span>
+					</span>
+				</div>
+			) }
+
+			{ ( ! isEditingLink && ! isResolvingLink ) && (
 				<Fragment>
 					<p className="screen-reader-text" id={ `current-link-label-${ instanceId }` }>
 						{ __( 'Currently selected' ) }:
@@ -220,7 +243,7 @@ function LinkControl( {
 				</Fragment>
 			) }
 
-			{ isEditingLink && (
+			{ isEditingLink && ! isResolvingLink && (
 				<LinkControlSearchInput
 					value={ inputValue }
 					onChange={ onInputChange }
@@ -235,7 +258,7 @@ function LinkControl( {
 				/>
 			) }
 
-			{ ! isEditingLink && (
+			{ ! isEditingLink && ! isResolvingLink && (
 				<LinkControlSettingsDrawer value={ value } settings={ settings } onChange={ onChange } />
 			) }
 		</div>
