@@ -39,32 +39,32 @@ function gutenberg_reregister_core_block_types() {
 	}
 
 	$block_names = array(
-		'archives.php'        => 'core/archives',
-		'block.php'           => 'core/block',
-		'calendar.php'        => 'core/calendar',
-		'categories.php'      => 'core/categories',
-		'latest-comments.php' => 'core/latest-comments',
-		'latest-posts.php'    => 'core/latest-posts',
-		'legacy-widget.php'   => 'core/legacy-widget',
-		'navigation.php'      => 'core/navigation',
-		'rss.php'             => 'core/rss',
-		'shortcode.php'       => 'core/shortcode',
-		'search.php'          => 'core/search',
-		'social-link.php'     => gutenberg_get_registered_social_link_blocks(),
-		'tag-cloud.php'       => 'core/tag-cloud',
-		'site-title.php'      => 'core/site-title',
-		'template-part.php'   => 'core/template-part',
-		'post-title.php'      => 'core/post-title',
-		'post-content.php'    => 'core/post-content',
-		'post-author.php'     => 'core/post-author',
-		'post-date.php'       => 'core/post-date',
-		'post-excerpt.php'    => 'core/post-excerpt',
+		'archives'        => 'core/archives',
+		'block'           => 'core/block',
+		'calendar'        => 'core/calendar',
+		'categories'      => 'core/categories',
+		'latest-comments' => 'core/latest-comments',
+		'latest-posts'    => 'core/latest-posts',
+		'legacy-widget'   => 'core/legacy-widget',
+		'navigation'      => 'core/navigation',
+		'rss'             => 'core/rss',
+		'shortcode'       => 'core/shortcode',
+		'search'          => 'core/search',
+		'social-link'     => gutenberg_get_registered_social_link_blocks(),
+		'tag-cloud'       => 'core/tag-cloud',
+		'site-title'      => 'core/site-title',
+		'template-part'   => 'core/template-part',
+		'post-title'      => 'core/post-title',
+		'post-content'    => 'core/post-content',
+		'post-author'     => 'core/post-author',
+		'post-date'       => 'core/post-date',
+		'post-excerpt'    => 'core/post-excerpt',
 	);
 
 	$registry = WP_Block_Type_Registry::get_instance();
 
-	foreach ( $block_names as $file => $block_names ) {
-		if ( ! file_exists( $blocks_dir . $file ) ) {
+	foreach ( $block_names as $folder_name => $block_names ) {
+		if ( ! file_exists( $blocks_dir . $folder_name . '/index.php' ) ) {
 			return;
 		}
 
@@ -80,7 +80,7 @@ function gutenberg_reregister_core_block_types() {
 			}
 		}
 
-		require $blocks_dir . $file;
+		require $blocks_dir . $folder_name . '/index.php';
 	}
 }
 add_action( 'init', 'gutenberg_reregister_core_block_types' );
