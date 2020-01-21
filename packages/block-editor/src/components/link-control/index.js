@@ -17,8 +17,9 @@ import {
 	prependHTTP,
 	getProtocol,
 } from '@wordpress/url';
-import { useInstanceId, withSafeTimeout } from '@wordpress/compose';
+import { useInstanceId } from '@wordpress/compose';
 import { useSelect } from '@wordpress/data';
+import apiFetch from '@wordpress/api-fetch';
 
 /**
  * Internal dependencies
@@ -33,7 +34,6 @@ function LinkControl( {
 	settings,
 	onChange = noop,
 	showInitialSuggestions,
-	setTimeout,
 } ) {
 	const instanceId = useInstanceId( LinkControl );
 	const [ inputValue, setInputValue ] = useState( ( value && value.url ) || '' );
@@ -164,17 +164,24 @@ function LinkControl( {
 									title: 'Loading link...',
 									url: 'loading...',
 								} );
-								const _result = await new Promise( ( resolve ) => {
-									setTimeout( () => {
-										resolve( {
-											title: 'Resolved Titlte',
-											url: '/some-revoled/slug',
-										} );
-									}, 5000 );
+								const newPage = await apiFetch( {
+									path: `/wp/v2/pages`,
+									data: {
+										title: inputValue,
+										content: '',
+										status: 'publish', // TODO: use publish?
+									},
+									method: 'POST',
 								} );
+								// TODO: handle error from API
 								setIsResolvingLink( false );
 								setIsEditingLink( false );
-								onChange( _result );
+								onChange( {
+									id: newPage.id,
+									title: newPage.title.raw, // TODO: use raw or rendered?
+									url: newPage.link,
+									type: newPage.type,
+								} );
 							} }
 						/>
 					) }
@@ -265,4 +272,4 @@ function LinkControl( {
 	);
 }
 
-export default withSafeTimeout( LinkControl );
+export default LinkControl;
