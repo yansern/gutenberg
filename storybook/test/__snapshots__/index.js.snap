@@ -4094,7 +4094,7 @@ exports[`Storyshots Components/Panel With Icon 1`] = `
 
 exports[`Storyshots Components/Placeholder Default 1`] = `
 <div
-  className="components-placeholder is-small"
+  className="components-placeholder"
 >
   <iframe
     aria-hidden={true}
