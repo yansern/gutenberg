@@ -7,7 +7,6 @@ import { noop } from 'lodash';
  * WordPress dependencies
  */
 import { withSelect, withDispatch } from '@wordpress/data';
-import { NavigableMenu } from '@wordpress/components';
 import { compose } from '@wordpress/compose';
 import { __ } from '@wordpress/i18n';
 
@@ -29,10 +28,7 @@ function BlockNavigation( { rootBlock, rootBlocks, selectedBlockClientId, select
 	);
 
 	return (
-		<NavigableMenu
-			role="presentation"
-			className="block-editor-block-navigation__container"
-		>
+		<div className="block-editor-block-navigation__container">
 			<p className="block-editor-block-navigation__label">{ __( 'Block navigation' ) }</p>
 			{ hasHierarchy && (
 				<BlockNavigationList
@@ -49,7 +45,7 @@ function BlockNavigation( { rootBlock, rootBlocks, selectedBlockClientId, select
 					selectBlock={ selectBlock }
 				/>
 			) }
-		</NavigableMenu>
+		</div>
 	);
 }
 
