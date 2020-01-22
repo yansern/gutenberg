@@ -88,7 +88,7 @@ describe( 'Navigating the block hierarchy', () => {
 
 		// Navigate to the last column in the columns block.
 		await openBlockNavigator();
-		await pressKeyTimes( 'Tab', 4 );
+		await pressKeyTimes( 'ArrowDown', 4 );
 		await page.keyboard.press( 'Enter' );
 		await page.waitForSelector( '.is-selected[data-type="core/column"]' );
 
