@@ -20,10 +20,6 @@ import {
 import { useInstanceId } from '@wordpress/compose';
 import { useSelect } from '@wordpress/data';
 
-/* eslint-disable import/no-extraneous-dependencies */
-import apiFetch from '@wordpress/api-fetch';
-/* eslint-enable import/no-extraneous-dependencies */
-
 /**
  * Internal dependencies
  */
@@ -38,6 +34,7 @@ function LinkControl( {
 	onChange = noop,
 	showInitialSuggestions,
 	showCreatePages,
+	createEmptyPage,
 } ) {
 	const instanceId = useInstanceId( LinkControl );
 	const [ inputValue, setInputValue ] = useState( ( value && value.url ) || '' );
@@ -159,7 +156,7 @@ function LinkControl( {
 						/>
 					) ) }
 
-					{ showCreatePages && ! isInitialSuggestions && (
+					{ showCreatePages && createEmptyPage && ! isInitialSuggestions && (
 						<LinkControlSearchCreate
 							searchTerm={ inputValue }
 							onClick={ async () => {
@@ -168,15 +165,7 @@ function LinkControl( {
 									title: 'Loading link...',
 									url: 'loading...',
 								} );
-								const newPage = await apiFetch( {
-									path: `/wp/v2/pages`,
-									data: {
-										title: inputValue,
-										content: '',
-										status: 'publish', // TODO: use publish?
-									},
-									method: 'POST',
-								} );
+								const newPage = await createEmptyPage( inputValue );
 								// TODO: handle error from API
 								setIsResolvingLink( false );
 								setIsEditingLink( false );

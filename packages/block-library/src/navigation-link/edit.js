@@ -37,6 +37,10 @@ import {
 } from '@wordpress/block-editor';
 import { Fragment, useState, useEffect } from '@wordpress/element';
 
+/* eslint-disable import/no-extraneous-dependencies */
+import apiFetch from '@wordpress/api-fetch';
+/* eslint-enable import/no-extraneous-dependencies */
+
 function NavigationLinkEdit( {
 	attributes,
 	hasDescendants,
@@ -171,6 +175,17 @@ function NavigationLinkEdit( {
 								value={ link }
 								showInitialSuggestions={ true }
 								showCreatePages={ true }
+								createEmptyPage={ ( pageTitle ) =>
+									apiFetch( {
+										path: `/wp/v2/pages`,
+										data: {
+											title: pageTitle,
+											content: '',
+											status: 'publish', // TODO: use publish?
+										},
+										method: 'POST',
+									} )
+								}
 								onChange={ ( {
 									title: newTitle = '',
 									url: newURL = '',
