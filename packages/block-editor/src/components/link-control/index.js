@@ -19,7 +19,10 @@ import {
 } from '@wordpress/url';
 import { useInstanceId } from '@wordpress/compose';
 import { useSelect } from '@wordpress/data';
+
+/* eslint-disable import/no-extraneous-dependencies */
 import apiFetch from '@wordpress/api-fetch';
+/* eslint-enable import/no-extraneous-dependencies */
 
 /**
  * Internal dependencies
@@ -34,6 +37,7 @@ function LinkControl( {
 	settings,
 	onChange = noop,
 	showInitialSuggestions,
+	showCreatePages,
 } ) {
 	const instanceId = useInstanceId( LinkControl );
 	const [ inputValue, setInputValue ] = useState( ( value && value.url ) || '' );
@@ -155,7 +159,7 @@ function LinkControl( {
 						/>
 					) ) }
 
-					{ ! isInitialSuggestions && (
+					{ showCreatePages && ! isInitialSuggestions && (
 						<LinkControlSearchCreate
 							searchTerm={ inputValue }
 							onClick={ async () => {
