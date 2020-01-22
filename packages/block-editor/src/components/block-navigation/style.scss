@@ -33,7 +33,8 @@ $tree-item-height: 36px;
 	}
 }
 
-.block-editor-block-navigation__item {
+.block-editor-block-navigation-item__block,
+.block-editor-block-navigation-item__appender {
 	display: flex;
 	align-items: center;
 	border-radius: 4px;
@@ -42,10 +43,6 @@ $tree-item-height: 36px;
 	&.is-selected:focus {
 		color: $dark-gray-700;
 		background: $light-gray-300;
-	}
-
-	&.is-appender {
-		width: $icon-button-size;
 	}
 
 	&:hover {
@@ -58,6 +55,10 @@ $tree-item-height: 36px;
 	}
 }
 
+.block-editor-block-navigation-item__appender {
+	width: $icon-button-size;
+}
+
 // Styles for nested block navigation lists.
 .block-editor-block-navigation__list .block-editor-block-navigation__list {
 	margin-top: 2px;
@@ -68,7 +69,8 @@ $tree-item-height: 36px;
 		margin-left: 1.5em;
 	}
 
-	.block-editor-block-navigation__item {
+	.block-editor-block-navigation-item__block,
+	.block-editor-block-navigation-item__appender {
 		position: relative;
 		margin-left: 0.5em;
 
@@ -97,7 +99,7 @@ $tree-item-height: 36px;
 	}
 }
 
-.block-editor-block-navigation__item-button {
+.block-editor-block-navigation-item__button {
 	display: flex;
 	align-items: center;
 	width: 100%;
@@ -125,7 +127,7 @@ $tree-item-height: 36px;
 	z-index: z-index(".components-popover.block-editor-block-navigation__popover");
 }
 
-.block-editor-block-navigation__item-movers {
+.block-editor-block-navigation-item__movers {
 	display: flex;
 	flex-direction: row;
 

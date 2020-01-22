@@ -1,95 +1,16 @@
 /**
  * External dependencies
  */
-import { animated } from 'react-spring/web.cjs';
 import { isNil, map, omitBy } from 'lodash';
-import classnames from 'classnames';
-
-/**
- * WordPress dependencies
- */
-import { Button } from '@wordpress/components';
-import {
-	__experimentalGetBlockLabel as getBlockLabel,
-	getBlockType,
-} from '@wordpress/blocks';
-import { useRef, useState } from '@wordpress/element';
-import { __ } from '@wordpress/i18n';
 
 /**
  * Internal dependencies
  */
 import NavigableTreeGrid from '../navigable-tree-grid';
 import RovingTabIndex from '../roving-tab-index';
-import BlockIcon from '../block-icon';
-import ButtonBlockAppender from '../button-block-appender';
-import { MoveUpButton, MoveDownButton } from '../block-mover/mover-buttons';
-import useMovingAnimation from '../use-moving-animation';
+import BlockNavigationItem from './item';
 
-function NavigationBlock( { block, onClick, isSelected, position, hasSiblings, showBlockMovers, children } ) {
-	const [ isHovered, setIsHovered ] = useState( false );
-	const [ isFocused, setIsFocused ] = useState( false );
-	const {
-		name,
-		clientId,
-		attributes,
-	} = block;
-	const blockType = getBlockType( name );
-	const blockDisplayName = getBlockLabel( blockType, attributes );
-
-	const wrapper = useRef( null );
-	const adjustScrolling = false;
-	const enableAnimation = true;
-	const animateOnChange = position;
-
-	const style = useMovingAnimation( wrapper, isSelected, adjustScrolling, enableAnimation, animateOnChange );
-
-	const hasVisibleMovers = isHovered || isSelected || isFocused;
-
-	return (
-		<animated.li ref={ wrapper } style={ style } role="treeitem">
-			<div
-				className={ classnames( 'block-editor-block-navigation__item', {
-					'is-selected': isSelected,
-				} ) }
-				onMouseEnter={ () => setIsHovered( true ) }
-				onMouseLeave={ () => setIsHovered( false ) }
-				onFocus={ () => setIsFocused( true ) }
-				onBlur={ () => setIsFocused( false ) }
-			>
-				<RovingTabIndex.Item>
-					<Button
-						className="block-editor-block-navigation__item-button"
-						onClick={ onClick }
-					>
-						<BlockIcon icon={ blockType.icon } showColors />
-						{ blockDisplayName }
-						{ isSelected && <span className="screen-reader-text">{ __( '(selected block)' ) }</span> }
-					</Button>
-				</RovingTabIndex.Item>
-				{ showBlockMovers && hasSiblings && (
-					<div className={ classnames( 'block-editor-block-navigation__item-movers', { 'is-visible': hasVisibleMovers } ) }>
-						<RovingTabIndex.Item>
-							<MoveUpButton
-								__experimentalOrientation="vertical"
-								clientIds={ [ clientId ] }
-							/>
-						</RovingTabIndex.Item>
-						<RovingTabIndex.Item>
-							<MoveDownButton
-								__experimentalOrientation="vertical"
-								clientIds={ [ clientId ] }
-							/>
-						</RovingTabIndex.Item>
-					</div>
-				) }
-			</div>
-			{ children }
-		</animated.li>
-	);
-}
-
-function NavigationList( props ) {
+function BlockNavigationList( props ) {
 	const {
 		blocks,
 		selectBlock,
@@ -110,7 +31,7 @@ function NavigationList( props ) {
 				const hasNestedBlocks = showNestedBlocks && !! innerBlocks && !! innerBlocks.length;
 
 				return (
-					<NavigationBlock
+					<BlockNavigationItem
 						key={ clientId }
 						block={ block }
 						onClick={ () => selectBlock( clientId ) }
@@ -120,7 +41,7 @@ function NavigationList( props ) {
 						showBlockMovers={ showBlockMovers }
 					>
 						{ hasNestedBlocks && (
-							<NavigationList
+							<BlockNavigationList
 								blocks={ innerBlocks }
 								selectedBlockClientId={ selectedBlockClientId }
 								selectBlock={ selectBlock }
@@ -130,30 +51,27 @@ function NavigationList( props ) {
 								parentBlockClientId={ clientId }
 							/>
 						) }
-					</NavigationBlock>
+					</BlockNavigationItem>
 				);
 			} ) }
-			{ hasAppender && (
-				<li role="treeitem">
-					<div className="editor-block-navigation__item block-editor-block-navigation__item is-appender">
-						<RovingTabIndex.Item>
-							<ButtonBlockAppender
-								rootClientId={ parentBlockClientId }
-								__experimentalSelectBlockOnInsert={ false }
-							/>
-						</RovingTabIndex.Item>
-					</div>
-				</li>
-			) }
+			{ hasAppender && <BlockNavigationItem.Appender parentBlockClientId={ parentBlockClientId } /> }
 		</ul>
 	);
 }
 
-export default function BlockNavigationList( props ) {
+/**
+ * Wrap `BlockNavigationList` with `NavigableTreeGrid` and
+ * `RovingTabIndex.Container`. BlockNavigationList is a recursive component
+ * (it renders itself), so this ensures NavigableTreeGrid is only present at
+ * the very top of the navigation list.
+ *
+ * @param {Object} props
+ */
+export default function BlockNavigationListWithTreeGrid( props ) {
 	return (
 		<NavigableTreeGrid>
 			<RovingTabIndex.Container>
-				<NavigationList { ...props } />
+				<BlockNavigationList { ...props } />
 			</RovingTabIndex.Container>
 		</NavigableTreeGrid>
 	);
