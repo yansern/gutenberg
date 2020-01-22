@@ -20,7 +20,7 @@ import { __ } from '@wordpress/i18n';
  * Internal dependencies
  */
 import NavigableTreeGrid from '../navigable-tree-grid';
-import RovingTabIndexItem from '../roving-tab-index/item';
+import RovingTabIndex from '../roving-tab-index';
 import BlockIcon from '../block-icon';
 import ButtonBlockAppender from '../button-block-appender';
 import { MoveUpButton, MoveDownButton } from '../block-mover/mover-buttons';
@@ -57,7 +57,7 @@ function NavigationBlock( { block, onClick, isSelected, position, hasSiblings, s
 				onFocus={ () => setIsFocused( true ) }
 				onBlur={ () => setIsFocused( false ) }
 			>
-				<RovingTabIndexItem>
+				<RovingTabIndex.Item>
 					<Button
 						className="block-editor-block-navigation__item-button"
 						onClick={ onClick }
@@ -66,21 +66,21 @@ function NavigationBlock( { block, onClick, isSelected, position, hasSiblings, s
 						{ blockDisplayName }
 						{ isSelected && <span className="screen-reader-text">{ __( '(selected block)' ) }</span> }
 					</Button>
-				</RovingTabIndexItem>
+				</RovingTabIndex.Item>
 				{ showBlockMovers && hasSiblings && (
 					<div className={ classnames( 'block-editor-block-navigation__item-movers', { 'is-visible': hasVisibleMovers } ) }>
-						<RovingTabIndexItem>
+						<RovingTabIndex.Item>
 							<MoveUpButton
 								__experimentalOrientation="vertical"
 								clientIds={ [ clientId ] }
 							/>
-						</RovingTabIndexItem>
-						<RovingTabIndexItem>
+						</RovingTabIndex.Item>
+						<RovingTabIndex.Item>
 							<MoveDownButton
 								__experimentalOrientation="vertical"
 								clientIds={ [ clientId ] }
 							/>
-						</RovingTabIndexItem>
+						</RovingTabIndex.Item>
 					</div>
 				) }
 			</div>
@@ -136,12 +136,12 @@ function NavigationList( props ) {
 			{ hasAppender && (
 				<li role="treeitem">
 					<div className="editor-block-navigation__item block-editor-block-navigation__item is-appender">
-						<RovingTabIndexItem>
+						<RovingTabIndex.Item>
 							<ButtonBlockAppender
 								rootClientId={ parentBlockClientId }
 								__experimentalSelectBlockOnInsert={ false }
 							/>
-						</RovingTabIndexItem>
+						</RovingTabIndex.Item>
 					</div>
 				</li>
 			) }
@@ -152,7 +152,9 @@ function NavigationList( props ) {
 export default function BlockNavigationList( props ) {
 	return (
 		<NavigableTreeGrid>
-			<NavigationList { ...props } />
+			<RovingTabIndex.Container>
+				<NavigationList { ...props } />
+			</RovingTabIndex.Container>
 		</NavigableTreeGrid>
 	);
 }
