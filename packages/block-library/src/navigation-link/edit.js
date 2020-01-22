@@ -37,10 +37,6 @@ import {
 } from '@wordpress/block-editor';
 import { Fragment, useState, useEffect } from '@wordpress/element';
 
-/* eslint-disable import/no-extraneous-dependencies */
-import apiFetch from '@wordpress/api-fetch';
-/* eslint-enable import/no-extraneous-dependencies */
-
 function NavigationLinkEdit( {
 	attributes,
 	hasDescendants,
@@ -48,6 +44,7 @@ function NavigationLinkEdit( {
 	isParentOfSelectedBlock,
 	setAttributes,
 	insertLinkBlock,
+	savePage,
 } ) {
 	const { label, opensInNewTab, title, url, nofollow, description } = attributes;
 	const link = {
@@ -176,14 +173,10 @@ function NavigationLinkEdit( {
 								showInitialSuggestions={ true }
 								showCreatePages={ true }
 								createEmptyPage={ ( pageTitle ) =>
-									apiFetch( {
-										path: `/wp/v2/pages`,
-										data: {
-											title: pageTitle,
-											content: '',
-											status: 'publish', // TODO: use publish?
-										},
-										method: 'POST',
+									savePage( {
+										title: pageTitle,
+										content: '',
+										status: 'publish', // TODO: use publish?
 									} )
 								}
 								onChange={ ( {
@@ -251,6 +244,10 @@ export default compose( [
 					insertionPoint,
 					clientId,
 				);
+			},
+			savePage( page ) {
+				const { saveEntityRecord } = dispatch( 'core' );
+				return saveEntityRecord( 'postType', 'page', page );
 			},
 		};
 	} ),
