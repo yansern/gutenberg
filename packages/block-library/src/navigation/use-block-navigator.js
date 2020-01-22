@@ -42,7 +42,6 @@ export default function useBlockNavigator( clientId ) {
 			onRequestClose={ () => {
 				setIsNavigationListOpen( false );
 			} }
-			__experimentalPreventKeyboardEventPropagation
 		>
 			<BlockNavigationList clientId={ clientId } />
 		</Modal>

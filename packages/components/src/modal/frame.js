@@ -8,15 +8,7 @@ import classnames from 'classnames';
  */
 
 import { Component, createRef } from '@wordpress/element';
-import {
-	LEFT,
-	RIGHT,
-	UP,
-	DOWN,
-	BACKSPACE,
-	ENTER,
-	ESCAPE,
-} from '@wordpress/keycodes';
+import { ESCAPE } from '@wordpress/keycodes';
 import { focus } from '@wordpress/dom';
 import { compose } from '@wordpress/compose';
 
@@ -27,8 +19,6 @@ import IsolatedEventContainer from '../isolated-event-container';
 import withFocusOutside from '../higher-order/with-focus-outside';
 import withFocusReturn from '../higher-order/with-focus-return';
 import withConstrainedTabbing from '../higher-order/with-constrained-tabbing';
-
-const KEYBOARD_NAVIGATION_KEYS = [ LEFT, DOWN, RIGHT, UP, BACKSPACE, ENTER ];
 
 class ModalFrame extends Component {
 	constructor() {
@@ -79,13 +69,6 @@ class ModalFrame extends Component {
 	handleKeyDown( event ) {
 		if ( event.keyCode === ESCAPE ) {
 			this.handleEscapeKeyDown( event );
-		}
-
-		if (
-			this.props.__experimentalPreventKeyboardEventPropagation &&
-			KEYBOARD_NAVIGATION_KEYS.indexOf( event.keyCode ) > -1
-		) {
-			event.stopPropagation();
 		}
 	}
 
