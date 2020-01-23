@@ -145,7 +145,7 @@ function LinkControl( {
 				{ labelText }
 			</span>
 		);
-		const showShowCreatePages = showCreatePages && createEmptyPage && ! isInitialSuggestions && ! isSingleDirectEntryResult;
+		const shouldShowCreatePages = showCreatePages && createEmptyPage && ! isSingleDirectEntryResult;
 
 		return (
 			<div className="block-editor-link-control__search-results-wrapper">
@@ -153,7 +153,7 @@ function LinkControl( {
 
 				<div { ...suggestionsListProps } className={ resultsListClasses } aria-labelledby={ searchResultsLabelId }>
 					{ suggestions.map( ( suggestion, index ) => {
-						if ( showShowCreatePages && CREATE_TYPE === suggestion.type ) {
+						if ( shouldShowCreatePages && CREATE_TYPE === suggestion.type ) {
 							return (
 								<LinkControlSearchCreate
 									searchTerm={ inputValue }
