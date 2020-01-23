@@ -44,7 +44,7 @@ function NavigationLinkEdit( {
 	isParentOfSelectedBlock,
 	setAttributes,
 	insertLinkBlock,
-	savePage,
+	saveEntityRecord,
 } ) {
 	const { label, opensInNewTab, title, url, nofollow, description } = attributes;
 	const link = {
@@ -172,12 +172,16 @@ function NavigationLinkEdit( {
 								value={ link }
 								showInitialSuggestions={ true }
 								showCreateEntity={ true }
-								createEmptyPage={ ( pageTitle ) =>
-									savePage( {
-										title: pageTitle,
-										content: '',
-										status: 'publish', // TODO: use publish?
-									} )
+								createEntity={ ( type, entityTitle ) =>
+									saveEntityRecord( 'postType', type, {
+										title: entityTitle,
+										status: 'publish',
+									} ).then( ( entity ) => ( {
+										id: entity.id,
+										type,
+										title: entity.title.raw, // TODO: use raw or rendered?
+										url: entity.link,
+									} ) )
 								}
 								onChange={ ( {
 									title: newTitle = '',
@@ -225,7 +229,9 @@ export default compose( [
 		};
 	} ),
 	withDispatch( ( dispatch, ownProps, registry ) => {
+		const { saveEntityRecord } = dispatch( 'core' );
 		return {
+			saveEntityRecord,
 			insertLinkBlock() {
 				const { clientId } = ownProps;
 
@@ -244,10 +250,6 @@ export default compose( [
 					insertionPoint,
 					clientId,
 				);
-			},
-			savePage( page ) {
-				const { saveEntityRecord } = dispatch( 'core' );
-				return saveEntityRecord( 'postType', 'page', page );
 			},
 		};
 	} ),
