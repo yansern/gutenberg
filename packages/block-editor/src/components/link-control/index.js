@@ -35,7 +35,7 @@ function LinkControl( {
 	settings,
 	onChange = noop,
 	showInitialSuggestions,
-	showCreatePages,
+	showCreateEntity,
 	createEmptyPage,
 } ) {
 	const instanceId = useInstanceId( LinkControl );
@@ -134,7 +134,7 @@ function LinkControl( {
 
 		const directLinkEntryTypes = [ 'url', 'mailto', 'tel', 'internal' ];
 		const isSingleDirectEntryResult = suggestions.length === 1 && directLinkEntryTypes.includes( suggestions[ 0 ].type.toLowerCase() );
-		const shouldShowCreateEntity = showCreatePages && createEmptyPage && ! isSingleDirectEntryResult;
+		const shouldShowCreateEntity = showCreateEntity && createEmptyPage && ! isSingleDirectEntryResult;
 
 		// According to guidelines aria-label should be added if the label
 		// itself is not visible.
