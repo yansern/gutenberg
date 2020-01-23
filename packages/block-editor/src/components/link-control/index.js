@@ -92,7 +92,7 @@ function LinkControl( {
 	};
 
 	const handleEntitySearch = async ( val, args ) => {
-		const results = await Promise.all( [
+		let results = await Promise.all( [
 			fetchSearchSuggestions( val, {
 				...( args.isInitialSuggestions ? { perPage: 3 } : {} ),
 			} ),
@@ -104,9 +104,18 @@ function LinkControl( {
 		// If it's potentially a URL search then concat on a URL search suggestion
 		// just for good measure. That way once the actual results run out we always
 		// have a URL option to fallback on.
-		const rtn = couldBeURL && ! args.isInitialSuggestions ? results[ 0 ].concat( results[ 1 ] ) : results[ 0 ];
+		results = couldBeURL && ! args.isInitialSuggestions ? results[ 0 ].concat( results[ 1 ] ) : results[ 0 ];
 
-		return rtn.concat( {
+		// Here we append a faux suggestion to represent a "CREATE" option. This
+		// is detected in the rendering of the search results and handeled as a
+		// special case. This is currently necessary because the suggestions
+		// dropdown will only appear if there are valid suggestions and
+		// therefore unless the create option is a suggestion it will not
+		// display in scenarios where there are no results returned from the
+		// API. In addition promoting CREATE to a first class suggestion affords
+		// the a11y benefits afforded by `URLInput` to all suggestions (eg:
+		// keyboard handling, ARIA roles...etc).
+		return results.concat( {
 			id: '-2',
 			title: '',
 			url: '',
@@ -114,7 +123,12 @@ function LinkControl( {
 		} );
 	};
 
-	// Effects
+	/**
+	 * Detmineres which type of search handler to use based on the users input.
+	 * Anything that is definitely a URL is handled only as a Direct Entry and no
+	 * request should be made for search results from an API. For anything
+	 * else a API search should made for matching Entities.
+	 */
 	const getSearchHandler = useCallback( ( val, args ) => {
 		const protocol = getProtocol( val ) || '';
 		const isMailto = protocol.includes( 'mailto' );
