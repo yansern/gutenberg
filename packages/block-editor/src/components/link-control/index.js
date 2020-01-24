@@ -42,6 +42,7 @@ function LinkControl( {
 	const [ inputValue, setInputValue ] = useState( ( value && value.url ) || '' );
 	const [ isEditingLink, setIsEditingLink ] = useState( ! value || ! value.url );
 	const [ isResolvingLink, setIsResolvingLink ] = useState( false );
+	const [ errorMsg, setErrorMsg ] = useState( null );
 
 	const { fetchSearchSuggestions } = useSelect( ( select ) => {
 		const { getSettings } = select( 'core/block-editor' );
@@ -57,10 +58,12 @@ function LinkControl( {
 	 * @param {string} val Current value returned by the search.
 	 */
 	const onInputChange = ( val = '' ) => {
+		setErrorMsg( null ); // remove lingering error messages
 		setInputValue( val );
 	};
 
 	const resetInput = () => {
+		setErrorMsg( null ); // remove lingering error messages
 		setInputValue( '' );
 	};
 
@@ -174,17 +177,19 @@ function LinkControl( {
 									searchTerm={ inputValue }
 									onClick={ async () => {
 										setIsResolvingLink( true );
+										setErrorMsg( null );
+
 										let newEntity;
+
 										try {
 											newEntity = await createEntity( 'page', inputValue );
 										} catch ( error ) {
-											// console.log( error );
-											// TODO: state for error
+											setErrorMsg( error.msg || __( 'An unknown error occurred during Page creation. Please try again.' ) );
 										}
 
 										setIsResolvingLink( false );
 
-										if ( newEntity ) {
+										if ( newEntity ) { // only set if request is resolved
 											onChange( newEntity );
 											setIsEditingLink( false );
 										} else {
@@ -300,6 +305,7 @@ function LinkControl( {
 					fetchSuggestions={ getSearchHandler }
 					onReset={ resetInput }
 					showInitialSuggestions={ showInitialSuggestions }
+					errorMsg={ errorMsg }
 				/>
 			) }
 
