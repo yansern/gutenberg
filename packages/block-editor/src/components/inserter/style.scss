@@ -64,11 +64,14 @@
 // Show popover background behind main menu and preview both.
 .block-editor-inserter__main-area,
 .block-editor-inserter__preview-panel {
-	box-shadow: $shadow-popover;
-	border: $border-width solid $light-gray-500;
 	background: $white;
 	width: 100%;
-	max-width: 480px;
+
+	@include break-medium() {
+		box-shadow: $shadow-popover;
+		border: $border-width solid $light-gray-500;
+		max-width: 480px;
+	}
 }
 
 // Container for just the block library.
@@ -170,27 +173,33 @@
 
 // Container for the preview.
 .block-editor-inserter__preview-panel {
-	position: relative;
-	height: 480px;
-	padding: $grid-size-large;
-	@include edit-post__fade-in-animation();
+	display: none;
 
-	.block-editor-block-card {
-		min-height: 6em;
-		padding-bottom: $grid-size-large;
-		margin-bottom: $grid-size-large;
-		border-bottom: $border-width solid $light-gray-500;
-	}
-
-	// Create a white overlay at the bottom of the preview to soft-crop the preview.
-	&::after {
-		content: "";
+	// Show preview panel when inserter is not modal.
+	@include break-medium () {
 		display: block;
-		position: absolute;
-		right: 0;
-		bottom: 0;
-		left: 0;
-		height: $grid-size-large;
-		background: $white;
+		position: relative;
+		height: 480px;
+		padding: $grid-size-large;
+		@include edit-post__fade-in-animation();
+
+		.block-editor-block-card {
+			min-height: 6em;
+			padding-bottom: $grid-size-large;
+			margin-bottom: $grid-size-large;
+			border-bottom: $border-width solid $light-gray-500;
+		}
+
+		// Create a white overlay at the bottom of the preview to soft-crop the preview.
+		&::after {
+			content: "";
+			display: block;
+			position: absolute;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			height: $grid-size-large;
+			background: $white;
+		}
 	}
 }
