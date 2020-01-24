@@ -102,12 +102,9 @@ function LinkControl( {
 
 	// Effects
 	const getSearchHandler = useCallback( ( val, args ) => {
-		const protocol = getProtocol( val ) || '';
-		const isMailto = protocol.includes( 'mailto' );
 		const isInternal = startsWith( val, '#' );
-		const isTel = protocol.includes( 'tel' );
 
-		const handleManualEntry = isInternal || isMailto || isTel || isURL( val ) || ( val && val.includes( 'www.' ) );
+		const handleManualEntry = isInternal || isURL( val ) || ( val && val.includes( 'www.' ) );
 
 		return ( handleManualEntry ) ? handleDirectEntry( val, args ) : handleEntitySearch( val, args );
 	}, [ handleDirectEntry, fetchSearchSuggestions ] );
