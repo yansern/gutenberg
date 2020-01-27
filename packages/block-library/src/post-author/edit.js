@@ -1,16 +1,23 @@
 /**
  * WordPress dependencies
  */
-import { useRef } from '@wordpress/element';
+import { useRef, useState } from '@wordpress/element';
 import { useEntityProp } from '@wordpress/core-data';
 import {
 	AlignmentToolbar,
 	BlockControls,
+	InspectorControls,
 	RichText,
 	__experimentalUseColors,
 	withFontSizes,
 } from '@wordpress/block-editor';
+import {
+	Notice,
+	PanelBody,
+	ToggleControl,
+} from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Internal dependencies
@@ -19,6 +26,9 @@ import BlockColorsStyleSelector from './block-colors-selector';
 
 function PostAuthorDisplay( { props, author } ) {
 	const ref = useRef();
+
+	const [ showAvatar, setShowAvatar ] = useState( true );
+	const [ showDisplayName, setShowDisplayName ] = useState( true );
 
 	const { setAttributes, fontSize } = props;
 
@@ -46,6 +56,11 @@ function PostAuthorDisplay( { props, author } ) {
 		author,
 	} );
 
+	const hasFirstOrLastNameSet = !! author.firstName || !! author.lastName;
+	const authorName = showDisplayName && hasFirstOrLastNameSet ?
+		[ author.firstName, author.lastName ].join( ' ' ) :
+		author.name;
+
 	return (
 		<>
 			<BlockControls>
@@ -59,15 +74,36 @@ function PostAuthorDisplay( { props, author } ) {
 
 				</BlockColorsStyleSelector>
 			</BlockControls>
+			<InspectorControls>
+				<PanelBody title={ __( 'Author Settings' ) }>
+					<ToggleControl
+						label={ __( 'Show avatar' ) }
+						checked={ showAvatar }
+						onChange={ () => setShowAvatar( ! showAvatar ) }
+					/>
+					<ToggleControl
+						label={ __( 'Show display name' ) }
+						checked={ showDisplayName }
+						onChange={ () => setShowDisplayName( ! showDisplayName ) }
+					/>
+					{ showDisplayName && ! hasFirstOrLastNameSet &&
+						<Notice status="warning" isDismissible={ false }>
+							{ __( 'This author does not have their name set' ) }
+						</Notice>
+					}
+				</PanelBody>
+			</InspectorControls>
 
 			{ InspectorControlsColorPanel }
 
 			<div ref={ ref } className="wp-block-post-author">
-				<img src={ author.avatar_urls[ 24 ] } alt={ author.name } className="wp-block-post-author__avatar" />
+				{ showAvatar &&
+					<img src={ author.avatar_urls[ 24 ] } alt={ authorName } className="wp-block-post-author__avatar" />
+				}
 				<RichText
 					className="wp-block-post-author__name"
 					multiline={ false }
-					value={ author.name }
+					value={ authorName }
 				/>
 			</div>
 		</>
