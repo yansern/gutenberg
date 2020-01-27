@@ -33,8 +33,12 @@
 .block-editor-inserter__popover > .components-popover__content {
 	@include break-medium {
 		overflow-y: visible;
-		width: 86vw; // This is limited by a max-width.
 		height: 92vh; // This is limited by a max-height from the popover component itself.
+		width: 82vw; // This is limited by a max-width.
+
+		.is-fullscreen-mode & {
+			width: 86vw;
+		}
 
 		// We take up the whole space horizontally, so as to afford a preview panel appearing.
 		// The layer is only for layout, and should not block clicks through it.
