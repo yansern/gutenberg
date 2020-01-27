@@ -96,16 +96,20 @@ function PostAuthorDisplay( { props, author } ) {
 
 			{ InspectorControlsColorPanel }
 
-			<div ref={ ref } className="wp-block-post-author">
-				{ showAvatar &&
-					<img src={ author.avatar_urls[ 24 ] } alt={ authorName } className="wp-block-post-author__avatar" />
-				}
-				<RichText
-					className="wp-block-post-author__name"
-					multiline={ false }
-					value={ authorName }
-				/>
-			</div>
+			<TextColor>
+				<BackgroundColor>
+					<div ref={ ref } className="wp-block-post-author">
+						{ showAvatar &&
+							<img src={ author.avatar_urls[ 24 ] } alt={ authorName } className="wp-block-post-author__avatar" />
+						}
+						<RichText
+							className="wp-block-post-author__name"
+							multiline={ false }
+							value={ authorName }
+						/>
+					</div>
+				</BackgroundColor>
+			</TextColor>
 		</>
 	);
 }
