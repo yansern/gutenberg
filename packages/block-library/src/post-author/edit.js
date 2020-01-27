@@ -14,6 +14,7 @@ import {
 import {
 	Notice,
 	PanelBody,
+	SelectControl,
 	ToggleControl,
 } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
@@ -29,6 +30,7 @@ function PostAuthorDisplay( { props, author } ) {
 
 	const [ showAvatar, setShowAvatar ] = useState( true );
 	const [ showDisplayName, setShowDisplayName ] = useState( true );
+	const [ avatarSize, setAvatarSize ] = useState( 24 );
 
 	const { setAttributes, fontSize } = props;
 
@@ -60,6 +62,11 @@ function PostAuthorDisplay( { props, author } ) {
 	const authorName = showDisplayName && hasFirstOrLastNameSet ?
 		[ author.firstName, author.lastName ].join( ' ' ) :
 		author.name;
+	const avatarSizes = [
+		{ value: 24, label: __( 'Small' ) },
+		{ value: 48, label: __( 'Medium' ) },
+		{ value: 96, label: __( 'Large' ) },
+	];
 
 	return (
 		<>
@@ -91,6 +98,15 @@ function PostAuthorDisplay( { props, author } ) {
 							{ __( 'This author does not have their name set' ) }
 						</Notice>
 					}
+					<hr />
+					<SelectControl
+						label={ __( 'Avatar size' ) }
+						value={ avatarSize }
+						options={ avatarSizes }
+						onChange={ ( size ) => {
+							setAvatarSize( size );
+						} }
+					/>
 				</PanelBody>
 			</InspectorControls>
 
@@ -100,7 +116,12 @@ function PostAuthorDisplay( { props, author } ) {
 				<BackgroundColor>
 					<div ref={ ref } className="wp-block-post-author">
 						{ showAvatar &&
-							<img src={ author.avatar_urls[ 24 ] } alt={ authorName } className="wp-block-post-author__avatar" />
+							<img
+								width={ avatarSize }
+								src={ author.avatar_urls[ avatarSize ] }
+								alt={ authorName }
+								className="wp-block-post-author__avatar"
+							/>
 						}
 						<RichText
 							className="wp-block-post-author__name"
