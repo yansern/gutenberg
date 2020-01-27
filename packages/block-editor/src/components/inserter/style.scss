@@ -69,10 +69,10 @@
 .block-editor-inserter__main-area,
 .block-editor-inserter__preview-panel {
 	background: $white;
-	width: 49%;
-	width: calc(50% - #{$grid-size-large});
 
 	@include break-medium() {
+		width: 49%;
+		width: calc(50% - #{$grid-size-large});
 		box-shadow: $shadow-popover;
 		border: $border-width solid $light-gray-500;
 		max-width: 480px;
